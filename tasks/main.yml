@@ -1,5 +1,5 @@
 ---
-# tasks file for baas-silent-config-file
+# tasks file for apigee-opdk-baas-silent-installation-config
 
 - name: Construct the silent-install file
   template:
