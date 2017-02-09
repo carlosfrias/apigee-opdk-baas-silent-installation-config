@@ -31,13 +31,13 @@ CASS_PASSWORD={{ opdk_cass_password }}
 BAAS_CASS_LOCALDC=dc-1
 BAAS_CASS_DC_LIST="dc-1"
 {% if opdk_version == '4.17.01' %}
-BAAS_CLUSTER_SEEDS="dc-1:{{ groups['dc-1-baas'][0] }}"
+BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host][interface_name].ipv4.address }}{% if not loop.last %},{% endif %}{% endfor %}"
 {% endif %}
 {% elif groups['dc-2'] is defined and inventory_hostname in groups['dc-2'] %}
 BAAS_CASS_LOCALDC=dc-2
 BAAS_CASS_DC_LIST="dc-2"
 {% if opdk_version == '4.17.01' %}
-BAAS_CLUSTER_SEEDS="dc-2:{{ groups['dc-2-baas'][0] }}"
+BAAS_CLUSTER_SEEDS="{% for host in groups['dc-2-baas'] %}dc-2:{{ hostvars[host][interface_name].ipv4.address }}{% if not loop.last %},{% endif %}{% endfor %}"
 {% endif %}
 {% endif %}
 
