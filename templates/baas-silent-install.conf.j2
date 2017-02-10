@@ -8,7 +8,15 @@ AS_ADMIN={{ baas_superuser_name }}
 AS_ADMIN_EMAIL={{ baas_superuser_email }}
 AS_PASSWD={{ baas_superuser_pass }}
 
+{# TODO: Build a module that discover the region of the inventory_hostname and update the REGION #}
+{% if groups['dc-1'] is defined and inventory_hostname in groups['dc-1'] %}
+REGION=dc-1
+{% elif groups['dc-2'] is defined and inventory_hostname in groups['dc-2'] %}
+REGION=dc-2
+{% endif %}
+
 # Specify Cassandra configuration information.
+{% --
 {% if groups['dc-1-cassandra'] is defined and inventory_hostname in groups['dc-1'] and groups['dc-1-cassandra'] | length > 0 %}
 CASS_HOSTS="{% for host in groups['dc-1-cassandra'] %}{{ hostvars[host][interface_name].ipv4.address }}:1,1{% if not loop.last %} {% endif %}{% endfor %}"
 {% elif groups['dc-2-cassandra'] is defined and inventory_hostname in groups['dc-2'] and groups['dc-2-cassandra'] | length > 0 %}
@@ -16,6 +24,8 @@ CASS_HOSTS="{% for host in groups['dc-2-cassandra'] %}{{ hostvars[host][interfac
 {% else %}
 CASS_HOSTS="{% for host in groups['cassandra'] %}{{ hostvars[host][interface_name].ipv4.address }}{%  if hostvars[host].rack is defined and hostvars[host].rack %}{{ hostvars[host].rack }}{% endif %}{% if not loop.last %} {% endif %}{% endfor %}"
 {% endif %}
+--%}
+CASS_HOSTS="{{ cassandra_hosts }}"
 
 # Cassandra uname/pword if you enabled Cassandra authentication.
 # Even if you have not enabled Cassandra authentication,

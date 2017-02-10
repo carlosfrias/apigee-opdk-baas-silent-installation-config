@@ -1,5 +1,6 @@
 ---
 # tasks file for apigee-opdk-baas-silent-installation-config
+- include: cassandra.yml
 
 - name: Construct the silent-install file
   template:
