@@ -1,6 +1,6 @@
 
 # Must resolve to IP address or DNS name of host - not to 127.0.0.1 or localhost.
-HOSTIP={{ hostvars[public_address]['local_address'] }}
+HOSTIP={{ hostvars[inventory_hostname]['local_address'] }}
 
 # Define the API BaaS administrator account.
 # User name - default is "superuser".
