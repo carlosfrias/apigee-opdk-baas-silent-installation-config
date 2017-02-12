@@ -30,9 +30,15 @@ BAAS_CASS_REPLICATION=dc-1:{{ groups['dc-1-cassandra'] | length }}
 BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host][interface_name].ipv4.address }}{% if not loop.last %},{% endif %}{% endfor %}"
 {% endif %}
 {% elif groups['dc-2'] is defined %}
+{% if inventory_hostname in groups['dc-1'] %}
+BAAS_CASS_LOCALDC=dc-1
+REGION=dc-1
+{% elif %}
 BAAS_CASS_LOCALDC=dc-2
-BAAS_CASS_DC_LIST=dc-1,dc-2
 REGION=dc-2
+{% endif %}
+
+BAAS_CASS_DC_LIST=dc-1,dc-2
 BAAS_CASS_REPLICATION=dc-1:{{ groups['dc-1-cassandra'] | length }},dc-2:{{ groups['dc-2-cassandra'] | length }}
 {% if opdk_version == '4.17.01' %}
 BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host][interface_name].ipv4.address }},{% endfor %}{% for host in groups['dc-2-baas'] %}dc-2:{{ hostvars[host][interface_name].ipv4.address }}{% if not loop.last %},{% endif %}{% endfor %}"
