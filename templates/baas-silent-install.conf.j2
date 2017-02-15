@@ -4,19 +4,19 @@ HOSTIP={{ hostvars[inventory_hostname]['local_address'] }}
 
 # Define the API BaaS administrator account.
 # User name - default is "superuser".
-AS_ADMIN={{ baas_superuser_name }}
-AS_ADMIN_EMAIL={{ baas_superuser_email }}
-AS_PASSWD={{ baas_superuser_pass }}
-
-# Specify Cassandra configuration information.
-CASS_HOSTS="{{ cassandra_hosts }}"
-
-# Cassandra uname/pword if you enabled Cassandra authentication.
-# Even if you have not enabled Cassandra authentication,
-# you must pass values for these properties.
-CASS_USERNAME={{ opdk_cass_username }}
-# Default value
-CASS_PASSWORD={{ opdk_cass_password }}
+#AS_ADMIN={{ baas_superuser_name }}
+#AS_ADMIN_EMAIL={{ baas_superuser_email }}
+#AS_PASSWD={{ baas_superuser_pass }}
+#
+## Specify Cassandra configuration information.
+#CASS_HOSTS="{{ cassandra_hosts }}"
+#
+## Cassandra uname/pword if you enabled Cassandra authentication.
+## Even if you have not enabled Cassandra authentication,
+## you must pass values for these properties.
+#CASS_USERNAME={{ opdk_cass_username }}
+## Default value
+#CASS_PASSWORD={{ opdk_cass_password }}
 
 # Specify BaaS Cassandra connection information.
 # Specify the data center name.
@@ -57,7 +57,7 @@ CASS_PASSWORD={{ opdk_cass_password }}
 
 # API BaaS Stack information.
 # Default cluster name is "apigee_baas"
-BAAS_USERGRID_CLUSTERNAME="{{ baas_cluster_name }}"
+#BAAS_USERGRID_CLUSTERNAME="{{ baas_cluster_name }}"
 
 # URL and port of the load balancer for the API BaaS Stack nodes, # or IP/DNS and port of a single Stack node with no load balancer.
 #{% if baas_load_balancer_host is defined and baas_load_balancer_host and baas_load_balancer_port is defined and baas_load_balancer_port %}
@@ -77,13 +77,13 @@ BAAS_USERGRID_CLUSTERNAME="{{ baas_cluster_name }}"
 #{% endif %}
 
 # Portal port. Default value is 9000.
-BAAS_PORTAL_LISTEN_PORT={{ baas_portal_port }}
-
-# SMTP information. BaaS requires an SMTP server.
-SMTPHOST={{ baas_smtp_host }}
-SMTPPORT={{ baas_smtp_port }}
-SMTPUSER='{{ baas_smtp_user }}'
-SMTPPASSWORD='{{ baas_smtp_user_pass }}'
-SMTPSSL={{ baas_smtp_ssl }}
-
-LICENSE_FILE={{ opdk_license_target_file_path }}
+#BAAS_PORTAL_LISTEN_PORT={{ baas_portal_port }}
+#
+## SMTP information. BaaS requires an SMTP server.
+#SMTPHOST={{ baas_smtp_host }}
+#SMTPPORT={{ baas_smtp_port }}
+#SMTPUSER='{{ baas_smtp_user }}'
+#SMTPPASSWORD='{{ baas_smtp_user_pass }}'
+#SMTPSSL={{ baas_smtp_ssl }}
+#
+#LICENSE_FILE={{ opdk_license_target_file_path }}
