@@ -4,7 +4,7 @@
 
 - name: Construct the silent-install file
   template:
-    src: 'baas-silent-install.conf.j2'
+    src: 'sample.j2'
     dest: "{{ opdk_baas_silent_install_file_path }}"
     force: yes
     owner: '{{ opdk_user_name }}'
