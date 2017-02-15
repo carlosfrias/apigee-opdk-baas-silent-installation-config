@@ -4,86 +4,85 @@ HOSTIP={{ hostvars[inventory_hostname]['local_address'] }}
 
 # Define the API BaaS administrator account.
 # User name - default is "superuser".
-#AS_ADMIN={{ baas_superuser_name }}
-#AS_ADMIN_EMAIL={{ baas_superuser_email }}
-#AS_PASSWD={{ baas_superuser_pass }}
-#
-## Specify Cassandra configuration information.
-#CASS_HOSTS="{{ cassandra_hosts }}"
-#
-## Cassandra uname/pword if you enabled Cassandra authentication.
-## Even if you have not enabled Cassandra authentication,
-## you must pass values for these properties.
-#CASS_USERNAME={{ opdk_cass_username }}
-## Default value
-#CASS_PASSWORD={{ opdk_cass_password }}
+AS_ADMIN={{ baas_superuser_name }}
+AS_ADMIN_EMAIL={{ baas_superuser_email }}
+AS_PASSWD={{ baas_superuser_pass }}
+
+# Specify Cassandra configuration information.
+CASS_HOSTS="{{ cassandra_hosts }}"
+
+# Cassandra uname/pword if you enabled Cassandra authentication.
+# Even if you have not enabled Cassandra authentication,
+# you must pass values for these properties.
+CASS_USERNAME={{ opdk_cass_username }}
+# Default value
+CASS_PASSWORD={{ opdk_cass_password }}
 
 # Specify BaaS Cassandra connection information.
 # Specify the data center name.
 # Default is dc-1.
-#{% if groups['dc-1'] is defined and groups['dc-2'] is not defined %}
-#BAAS_CASS_LOCALDC=dc-1
-#BAAS_CASS_DC_LIST=dc-1
-#REGION=dc-1
-#BAAS_CASS_REPLICATION=dc-1:{{ groups['dc-1-cassandra'] | length }}
-#{% if opdk_version == '4.17.01' %}
-#BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['local_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
-#{% endif %}
-#{% elif groups['dc-2'] is defined %}
-#
-#{% if inventory_hostname in groups['dc-1'] %}
-#BAAS_CASS_LOCALDC=dc-1
-#REGION=dc-1
-#{% elif %}
-#BAAS_CASS_LOCALDC=dc-2
-#REGION=dc-2
-#{% endif %}
-#
-#BAAS_CASS_DC_LIST=dc-1,dc-2
-#BAAS_CASS_REPLICATION=dc-1:{{ groups['dc-1-cassandra'] | length }},dc-2:{{ groups['dc-2-cassandra'] | length }}
-#{% if opdk_version == '4.17.01' %}
-#BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['local_address']}},{% endfor %}{% for host in groups['dc-2-baas'] %}dc-2:{{ hostvars[host]['local_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
-#{% endif %}
-#{% endif %}
+{% if groups['dc-1'] is defined and groups['dc-2'] is not defined %}
+BAAS_CASS_LOCALDC=dc-1
+BAAS_CASS_DC_LIST=dc-1
+REGION=dc-1
+BAAS_CASS_REPLICATION=dc-1:{{ groups['dc-1-cassandra'] | length }}
+{% if opdk_version == '4.17.01' %}
+BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['local_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+{% endif %}
+{% elif groups['dc-2'] is defined %}
+{% if inventory_hostname in groups['dc-1'] %}
+BAAS_CASS_LOCALDC=dc-1
+REGION=dc-1
+{% elif %}
+BAAS_CASS_LOCALDC=dc-2
+REGION=dc-2
+{% endif %}
+
+BAAS_CASS_DC_LIST=dc-1,dc-2
+BAAS_CASS_REPLICATION=dc-1:{{ groups['dc-1-cassandra'] | length }},dc-2:{{ groups['dc-2-cassandra'] | length }}
+{% if opdk_version == '4.17.01' %}
+BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['local_address']}},{% endfor %}{% for host in groups['dc-2-baas'] %}dc-2:{{ hostvars[host]['local_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+{% endif %}
+{% endif %}
 
 # ElasticSearch IPs or DNS names, separated by spaces.
-#{% if groups['dc-1-elastic'] is defined and inventory_hostname in groups['dc-1'] %}
-#ES_HOSTS="{% for host in groups['dc-1-elastic'] %}{{ hostvars[host]['local_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
-#{% elif groups['dc-2-elastic'] is defined and inventory_hostname in groups['dc-2'] %}
-#ES_HOSTS="{% for host in groups['dc-2-elastic'] %}{{ hostvars[host]['local_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
-#{% else %}
-#ES_HOSTS="{% for host in groups['elastic'] %}{{ hostvars[host]['local_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
-#{% endif %}
+{% if groups['dc-1-elastic'] is defined and inventory_hostname in groups['dc-1'] %}
+ES_HOSTS="{% for host in groups['dc-1-elastic'] %}{{ hostvars[host]['local_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
+{% elif groups['dc-2-elastic'] is defined and inventory_hostname in groups['dc-2'] %}
+ES_HOSTS="{% for host in groups['dc-2-elastic'] %}{{ hostvars[host]['local_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
+{% else %}
+ES_HOSTS="{% for host in groups['elastic'] %}{{ hostvars[host]['local_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
+{% endif %}
 
 # API BaaS Stack information.
 # Default cluster name is "apigee_baas"
-#BAAS_USERGRID_CLUSTERNAME="{{ baas_cluster_name }}"
+BAAS_USERGRID_CLUSTERNAME="{{ baas_cluster_name }}"
 
 # URL and port of the load balancer for the API BaaS Stack nodes, # or IP/DNS and port of a single Stack node with no load balancer.
-#{% if baas_load_balancer_host is defined and baas_load_balancer_host and baas_load_balancer_port is defined and baas_load_balancer_port %}
-#BAAS_USERGRID_URL="http://{{ baas_load_balancer_host }}:{{ baas_load_balancer_port }}"
-#{% elif groups['portal'][0] is defined and groups['baas'][0] and baas_portal_port is defined and baas_portal_port %}
-#BAAS_USERGRID_URL="http://{{ groups['baas'][0] }}:{{ baas_load_balancer_port }}"
-#{% endif %}
+{% if baas_load_balancer_host is defined and baas_load_balancer_host and baas_load_balancer_port is defined and baas_load_balancer_port %}
+BAAS_USERGRID_URL="http://{{ baas_load_balancer_host }}:{{ baas_load_balancer_port }}"
+{% elif groups['portal'][0] is defined and groups['baas'][0] and baas_portal_port is defined and baas_portal_port %}
+BAAS_USERGRID_URL="http://{{ groups['baas'][0] }}:{{ baas_load_balancer_port }}"
+{% endif %}
 
 # API BaaS Portal information.
 # URL and port number of load balancer, if there is one in front of the Portal, # or the URL and port of the Portal node.
-#{% if groups['dc-1-portal'] is defined and inventory_hostname in groups['dc-1'] %}
-#BAAS_PORTAL_URL="http://{{ hostvars[groups['dc-1-portal'][0]]['public_address'] }}:{{baas_portal_port }}"
-#{% elif groups['dc-2-portal'] is defined and inventory_hostname in groups['dc-2'] %}
-#BAAS_PORTAL_URL="http://{{ hostvars[groups['dc-2-portal'][0]]['public_address'] }}:{{ baas_portal_port }}"
-#{% else %}
-#BAAS_PORTAL_URL="http://{{ hostvars[groups['portal'][0]]['public_address'] }}:{{ baas_portal_port }}"
-#{% endif %}
+{% if groups['dc-1-portal'] is defined and inventory_hostname in groups['dc-1'] %}
+BAAS_PORTAL_URL="http://{{ hostvars[groups['dc-1-portal'][0]]['public_address'] }}:{{baas_portal_port }}"
+{% elif groups['dc-2-portal'] is defined and inventory_hostname in groups['dc-2'] %}
+BAAS_PORTAL_URL="http://{{ hostvars[groups['dc-2-portal'][0]]['public_address'] }}:{{ baas_portal_port }}"
+{% else %}
+BAAS_PORTAL_URL="http://{{ hostvars[groups['portal'][0]]['public_address'] }}:{{ baas_portal_port }}"
+{% endif %}
 
 # Portal port. Default value is 9000.
-#BAAS_PORTAL_LISTEN_PORT={{ baas_portal_port }}
-#
-## SMTP information. BaaS requires an SMTP server.
-#SMTPHOST={{ baas_smtp_host }}
-#SMTPPORT={{ baas_smtp_port }}
-#SMTPUSER='{{ baas_smtp_user }}'
-#SMTPPASSWORD='{{ baas_smtp_user_pass }}'
-#SMTPSSL={{ baas_smtp_ssl }}
-#
-#LICENSE_FILE={{ opdk_license_target_file_path }}
+BAAS_PORTAL_LISTEN_PORT={{ baas_portal_port }}
+
+# SMTP information. BaaS requires an SMTP server.
+SMTPHOST={{ baas_smtp_host }}
+SMTPPORT={{ baas_smtp_port }}
+SMTPUSER='{{ baas_smtp_user }}'
+SMTPPASSWORD='{{ baas_smtp_user_pass }}'
+SMTPSSL={{ baas_smtp_ssl }}
+
+LICENSE_FILE={{ opdk_license_target_file_path }}
