@@ -1,4 +1,3 @@
-
 # Must resolve to IP address or DNS name of host - not to 127.0.0.1 or localhost.
 HOSTIP={{ hostvars[inventory_hostname]['local_address'] }}
 
@@ -21,25 +20,25 @@ CASS_PASSWORD={{ opdk_cass_password }}
 # Specify BaaS Cassandra connection information.
 # Specify the data center name.
 # Default is dc-1.
-{% if groups['dc-1'] is defined and groups['dc-2'] is not defined %}
+{% if groups['dc-1'] is defined and inventory_hostname in groups['dc-1'] %}
 BAAS_CASS_LOCALDC=dc-1
 BAAS_CASS_DC_LIST=dc-1
 REGION=dc-1
+
+# Replication is in the form "dataCenterName:#CassandraNodes".
+# For example, for dc-1 with three Cassandra nodes, it is dc-1:3.
 BAAS_CASS_REPLICATION=dc-1:{{ groups['dc-1-cassandra'] | length }}
 {% if opdk_version == '4.17.01' %}
 BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['local_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
 {% endif %}
-{% elif groups['dc-2'] is defined %}
-{% if inventory_hostname in groups['dc-1'] %}
-BAAS_CASS_LOCALDC=dc-1
-REGION=dc-1
-{% elif %}
+{% elif groups['dc-2'] is defined and inventory_hostname in groups['dc-2'] %}
 BAAS_CASS_LOCALDC=dc-2
-REGION=dc-2
-{% endif %}
-
 BAAS_CASS_DC_LIST=dc-1,dc-2
-BAAS_CASS_REPLICATION=dc-1:{{ groups['dc-1-cassandra'] | length }},dc-2:{{ groups['dc-2-cassandra'] | length }}
+REGION=dc-2
+
+# Replication is in the form "dataCenterName:#CassandraNodes".
+# For example, for dc-1 with three Cassandra nodes, it is dc-1:3.
+BAAS_CASS_REPLICATION= dc-1:{{ groups['dc-1-cassandra'] | length }},dc-2:{{ groups['dc-2-cassandra'] | length }}
 {% if opdk_version == '4.17.01' %}
 BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['local_address']}},{% endfor %}{% for host in groups['dc-2-baas'] %}dc-2:{{ hostvars[host]['local_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
 {% endif %}
@@ -85,4 +84,5 @@ SMTPUSER='{{ baas_smtp_user }}'
 SMTPPASSWORD='{{ baas_smtp_user_pass }}'
 SMTPSSL={{ baas_smtp_ssl }}
 
+# File path to the Apigee license file
 LICENSE_FILE={{ opdk_license_target_file_path }}
