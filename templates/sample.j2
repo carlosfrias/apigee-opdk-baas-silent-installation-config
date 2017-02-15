@@ -23,13 +23,13 @@ CASS_PASSWORD={{ opdk_cass_password }}
 # Default is dc-1.
 {% if groups['dc-1'] is defined and inventory_hostname in groups['dc-1'] %}
 BAAS_CASS_LOCALDC=dc-1
-BAAS_CASS_DC_LIST="dc-1"
+BAAS_CASS_DC_LIST=dc-1
 {% if opdk_version == '4.17.01' %}
 BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['local_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
 {% endif %}
 {% elif groups['dc-2'] is defined and inventory_hostname in groups['dc-2'] %}
 BAAS_CASS_LOCALDC=dc-2
-BAAS_CASS_DC_LIST="dc-2"
+BAAS_CASS_DC_LIST=dc-1,dc-2
 {% if opdk_version == '4.17.01' %}
 BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['local_address']}},{% endfor %}{% for host in groups['dc-2-baas'] %}dc-2:{{ hostvars[host]['local_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
 {% endif %}
@@ -42,7 +42,7 @@ BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host][
 {% if groups['dc-1-cassandra'] is defined and inventory_hostname in groups['dc-1'] %}
 BAAS_CASS_REPLICATION=dc-1:{{ groups['dc-1-cassandra'] | length }}
 {% elif groups['dc-2-cassandra'] is defined and inventory_hostname in groups['dc-2'] %}
-BAAS_CASS_REPLICATION=dc-2:{{ groups['dc-2-cassandra'] | length }}
+BAAS_CASS_REPLICATION= dc-1:{{ groups['dc-1-cassandra'] | length }},dc-2:{{ groups['dc-2-cassandra'] | length }}
 {% else %}
 BAAS_CASS_REPLICATION=dc-1:{{ groups['cassandra'] | length }}
 {% endif %}
