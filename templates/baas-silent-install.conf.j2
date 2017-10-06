@@ -1,5 +1,5 @@
 # Must resolve to IP address or DNS name of host - not to 127.0.0.1 or localhost.
-HOSTIP={{ hostvars[inventory_hostname]['local_address'] }}
+HOSTIP={{ hostvars[inventory_hostname]['private_address'] }}
 
 # Define the API BaaS administrator account.
 # User name - default is "superuser".
@@ -29,7 +29,7 @@ REGION=dc-1
 # For example, for dc-1 with three Cassandra nodes, it is dc-1:3.
 BAAS_CASS_REPLICATION=dc-1:{{ groups['dc-1-cassandra'] | length }}
 {% if opdk_version == '4.17.01' %}
-BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['local_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['private_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
 {% endif %}
 {% elif groups['dc-2'] is defined and inventory_hostname in groups['dc-2'] %}
 BAAS_CASS_LOCALDC=dc-2
@@ -40,17 +40,17 @@ REGION=dc-2
 # For example, for dc-1 with three Cassandra nodes, it is dc-1:3.
 BAAS_CASS_REPLICATION= dc-1:{{ groups['dc-1-cassandra'] | length }},dc-2:{{ groups['dc-2-cassandra'] | length }}
 {% if opdk_version == '4.17.01' %}
-BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['local_address']}},{% endfor %}{% for host in groups['dc-2-baas'] %}dc-2:{{ hostvars[host]['local_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+BAAS_CLUSTER_SEEDS="{% for host in groups['dc-1-baas'] %}dc-1:{{ hostvars[host]['private_address']}},{% endfor %}{% for host in groups['dc-2-baas'] %}dc-2:{{ hostvars[host]['private_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
 {% endif %}
 {% endif %}
 
 # ElasticSearch IPs or DNS names, separated by spaces.
 {% if groups['dc-1-elastic'] is defined and inventory_hostname in groups['dc-1'] %}
-ES_HOSTS="{% for host in groups['dc-1-elastic'] %}{{ hostvars[host]['local_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
+ES_HOSTS="{% for host in groups['dc-1-elastic'] %}{{ hostvars[host]['private_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
 {% elif groups['dc-2-elastic'] is defined and inventory_hostname in groups['dc-2'] %}
-ES_HOSTS="{% for host in groups['dc-2-elastic'] %}{{ hostvars[host]['local_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
+ES_HOSTS="{% for host in groups['dc-2-elastic'] %}{{ hostvars[host]['private_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
 {% else %}
-ES_HOSTS="{% for host in groups['elastic'] %}{{ hostvars[host]['local_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
+ES_HOSTS="{% for host in groups['elastic'] %}{{ hostvars[host]['private_address'] }}{% if not loop.last %} {% endif %}{% endfor %}"
 {% endif %}
 
 # API BaaS Stack information.
