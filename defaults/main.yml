@@ -1,4 +1,5 @@
 ---
 # defaults file for baas-silent-config-file
 baas_cluster_name: 'apigee_baas'
+baas_portal_port: '9000'
 
