@@ -61,7 +61,7 @@ BAAS_USERGRID_CLUSTERNAME="{{ baas_cluster_name }}"
 {% if baas_load_balancer_host is defined and baas_load_balancer_host and baas_load_balancer_port is defined and baas_load_balancer_port %}
 BAAS_USERGRID_URL="http://{{ baas_load_balancer_host }}:{{ baas_load_balancer_port }}"
 {% elif groups['portal'][0] is defined and groups['baas'][0] and baas_portal_port is defined and baas_portal_port %}
-BAAS_USERGRID_URL="http://{{ groups['baas'][0][private_address'] }}:{{ baas_load_balancer_port }}"
+BAAS_USERGRID_URL="http://{{ groups['baas'][0][private_address] }}:{{ baas_load_balancer_port }}"
 {% endif %}
 
 # API BaaS Portal information.
