@@ -10,4 +10,4 @@
   - { key: 'baas_load_balancer_port', value: '8080' }
   - { key: 'baas_smtp_host', value: 'smtp.gmail.com' }
   - { key: 'baas_smtp_port', value: '465' }
-
+  - { key: 'baas_smtp_ssl', value: 'n' }
