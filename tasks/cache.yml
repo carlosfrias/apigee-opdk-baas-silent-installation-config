@@ -8,3 +8,6 @@
   - { key: 'baas_cluster_name', value: '{{ baas_cluster_name }}' }
   - { key: 'baas_portal_port', value: '{{ baas_portal_port }}' }
   - { key: 'baas_load_balancer_port', value: '8080' }
+  - { key: 'baas_smtp_host', value: 'smtp.gmail.com' }
+  - { key: 'baas_smtp_port', value: '465' }
+
