@@ -1,2 +1,4 @@
 ---
 # defaults file for baas-silent-config-file
+baas_cluster_name: 'apigee_baas'
+
