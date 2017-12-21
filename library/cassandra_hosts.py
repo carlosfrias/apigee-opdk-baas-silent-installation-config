@@ -7,7 +7,7 @@ import os
 GROUPS = 'groups'
 PUBLIC_ADDRESS = 'public_address'
 RACK = "rack"
-LOCAL_ADDRESS = 'local_address'
+LOCAL_ADDRESS = 'private_address'
 NOT_DEFINED = 'NOT DEFINED'
 LEAD_GROUP = 'lead_group'
 
