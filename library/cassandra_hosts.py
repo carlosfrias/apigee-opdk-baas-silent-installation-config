@@ -39,7 +39,7 @@ def extract_cassandra_groups(inventory_vars, hostvars):
                 else:
                     private_ip = NOT_DEFINED
             cassandra_ip_map = cassandra_ip_mappings[cassandra_group_name]
-            cassandra_ip_map[ds_ip] = { 'private_ip': private_ip }
+            cassandra_ip_map[ds_ip] = { 'private_address': private_ip }
     return cassandra_ip_mappings
 
 
@@ -47,7 +47,7 @@ def configure_cassandra_racks(cassandra_groups):
     for cassandra_group_name in cassandra_groups:
         group_name_parts = cassandra_group_name.split('-')
         for ds_ip in cassandra_groups[cassandra_group_name]:
-            cassandra_groups[cassandra_group_name][ds_ip]['private_ip'] = cassandra_groups[cassandra_group_name][ds_ip]['private_ip'] + ":" + group_name_parts[1] + ',1'
+            cassandra_groups[cassandra_group_name][ds_ip]['private_address'] = cassandra_groups[cassandra_group_name][ds_ip]['private_address'] + ":" + group_name_parts[1] + ',1'
     return cassandra_groups
 
 
@@ -67,12 +67,12 @@ def prioritize_cassandra_groups(cassandra_groups):
     del cassandra_groups['lead_group']
 
     for ds_ip in cassandra_groups[ds_lead_group]:
-            prioritized_groups.append(cassandra_groups[ds_lead_group][ds_ip]['private_ip'])
+            prioritized_groups.append(cassandra_groups[ds_lead_group][ds_ip]['private_address'])
     del cassandra_groups[ds_lead_group]
 
     for cassandra_group_name in cassandra_groups:
         for ds_ip in cassandra_groups[cassandra_group_name]:
-            prioritized_groups.append(cassandra_groups[cassandra_group_name][ds_ip]['private_ip'])
+            prioritized_groups.append(cassandra_groups[cassandra_group_name][ds_ip]['private_address'])
 
     return prioritized_groups
 
