@@ -1,0 +1,9 @@
+---
+- name: Update cache with key and value
+  cache:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_items:
+  - { key: 'opdk_baas_silent_install_file_path', value: '{{ opdk_installer_path }}/edge-baas-response.conf' }
+  - { key: 'baas_cluster_name', value: '{{ baas_cluster_name }}' }
+  - { key: 'baas_portal_port', value: '{{ baas_portal_port }}' }
